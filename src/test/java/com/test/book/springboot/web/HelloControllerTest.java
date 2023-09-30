@@ -1,10 +1,14 @@
 package com.test.book.springboot.web;
 
 import com.test.book.springboot.Application;
+import com.test.book.springboot.config.auth.SecurityConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -14,7 +18,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(controllers = HelloController.class)
+@WebMvcTest(controllers = HelloController.class,
+            excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,classes = SecurityConfig.class)})
 @ContextConfiguration(classes={Application.class})
 //@SpringBootTest(classes={Application.class})
 public class HelloControllerTest{
@@ -22,8 +27,8 @@ public class HelloControllerTest{
     @Autowired
     private MockMvc mvc;
 
+    @WithMockUser(roles="USER")
     @Test
-    //@WithMockUser
     public void hello가_리턴된다() throws Exception {
         //given
         String hello = "hello";
@@ -35,8 +40,8 @@ public class HelloControllerTest{
                 .andExpect(content().string(hello));
     }
 
+    @WithMockUser(roles="USER")
     @Test
-    //@WithMockUser
     public void helloDto가_리턴된다() throws Exception {
         String name = "hello";
         int amount = 1000;
