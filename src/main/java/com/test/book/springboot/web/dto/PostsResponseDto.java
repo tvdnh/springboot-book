@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 public class PostsResponseDto {
 
-    //commmit 11
+    //commmit 1176878
     private Long id;
     private String title;
     private String content;
